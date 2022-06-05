@@ -6,10 +6,11 @@
   html,
   body {
     width: 100%;
+
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: "Poppins";
+    font-family: 'Segoe UI', 'Open Sans', 'Helvetica Neue', sans-serif;
   }
   
   h1,
@@ -25,16 +26,31 @@
   }
 
 
-.main{
+  h1 {
+    font-size: 45px;
+    font-weight: 500; 
+    color: rgb(255, 255, 255)
+}
+
+  header{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,.8);
+    height: 100px;
+  }
+
+.main{
+    display: flex;
+    flex-direction: column;
     align-items: center;
     height: 100%;
 }
 
 .main-search-bar{
   position: relative;
+  top: 100px;
   bottom: 30vh;
   }
 
@@ -50,13 +66,11 @@
   bottom: 30px;
   left:864px; 
   display: block;
-  border: 1px solid black;
   color: white;
   background-color: rgb(62, 62, 62); 
   height: 30px;
   width: 70px;
   border-radius: 5px;
-  
 }
 
 .results-list{
@@ -66,15 +80,22 @@
   width: 100%;
   position: absolute;
   color: black;
-  font-size:24px
+  font-size:18px;
 }
 
+.container { 
+  box-shadow: 5px 10px 18px #888888
+}
 
 p{
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgb(218, 218, 218);
   color: black;
-  font-size: 24px;
-  padding:10px
+  font-size: 18px;
+  padding:10px;
+}
+
+p:hover{
+  text-decoration: underline;
 }
 
 
@@ -88,6 +109,77 @@ a{
 font-size: 24px;
 }
 
+.display-stock{
+ 
+  width: 100%;
+  display:flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items: center;
+}
+
+.name{
+  font-size: 24px;
+  padding-bottom: 10px;
+}
+
+.price{
+  padding-bottom: 10px;
+  font-weight: 600;
+}
+
+img{
+  height: 50px;
+  position: relative;
+  left: 550px;
+  top:55px;
+}
+
+.description{
+  padding-bottom: 20px;
+}
+
+.pecentege{
+  padding-bottom: 20px;
+}
+
+.red {
+  font-weight: 500;
+  background-color: #ffdede;
+  padding: 16px;
+  max-width:100px;
+  border-radius:10px;
+  color:red;
+}
+
+
+.green {
+  font-weight: 500;
+  background-color:  #d6ffef;
+  padding: 16px;
+  width:115px;
+  border-radius:10px;
+  color:green;
+ 
+}
+
+
+.description{
+  height: 85px;
+  overflow: hidden;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  max-width: 600px;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden; 
+}
+
+
+canvas{
+ height: 230px;
+ width: 650px;
+}
 
 
 
