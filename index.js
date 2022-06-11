@@ -9,27 +9,50 @@ const app = () => {
   }
 
   function displaySearchPage() {
-    function dataFetch() {
-      const loadingElement = showLoadingScreen();
-      let searchUrl = `https:stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${input.value}&amp;limit=10&amp;exchange=NASDAQ`;
-      fetch(searchUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          loadingElement.remove();
-          displaySearch(data);
-          fetchNTimes()
-            .then(awaitJson)
-            .then((data) => {
-              getImg(data);
-              getChangesPercentage(data);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    async function fetchMarqueeData() {
+      try {
+        let url = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/quotes/nyse?exchange=NASDAQ`;
+        let response = await fetch(url);
+        let data = await response.json();
+        let marqueeContainer = document.getElementById("marquee__container");
+        for (let j = 0; j < 4; j++) {
+          for (let i = 0; i < 10; i++) {
+            let marqueePrice = document.createElement("div");
+            marqueePrice.className = "marquee-price";
+            let marqueeSymbol = document.createElement("div");
+            marqueeSymbol.className = "marquee-name";
+            const symbol = data[i].symbol;
+            const price = `${data[i].price}$`;
+            marqueeSymbol.innerHTML = symbol;
+            marqueePrice.innerHTML = price;
+            marqueePrice.classList.add("green");
+            marqueeContainer.appendChild(marqueeSymbol);
+            marqueeContainer.appendChild(marqueePrice);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchMarqueeData();
+
+    async function dataFetch() {
+      try {
+        const loadingElement = showLoadingScreen();
+        let searchUrl = `https:stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${input.value}&amp;limit=10&amp;exchange=NASDAQ`;
+        let searchResponse = await fetch(searchUrl);
+        let data = await searchResponse.json();
+        displaySearch(data);
+
+        let addDataUrl = await fetchNTimes();
+        let addDataResponse = await awaitJson(addDataUrl);
+        getImg(addDataResponse);
+        getChangesPercentage(addDataResponse);
+        loadingElement.remove();
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     function getImg(data) {
@@ -49,7 +72,6 @@ const app = () => {
       let aTag = document.getElementById("container").querySelectorAll(".aTag");
       for (let i = 0; i < data.length; i++) {
         let div = document.createElement("div");
-        console.log(data[i].profile);
         div.className = "changesPercentage";
         if (data[i].profile.changesPercentage < 0) {
           div.innerHTML = `${data[i].profile.changesPercentage}%`;
@@ -99,7 +121,6 @@ const app = () => {
       container.className = "container";
       container.id = "container";
       for (let i = 0; i < listLength; i++) {
-        console.log(data);
         let element = `${data[i].name}  (${data[i].symbol})`;
         let aTag = document.createElement("a");
         let para = document.createElement("p");
@@ -136,31 +157,28 @@ const app = () => {
       return symbol;
     }
 
-    function fetchCompanyData() {
+    async function fetchCompanyData() {
       const loadingElement = showLoadingScreen();
       let symbol = catSymbol();
       let url = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbol}`;
-      fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-          loadingElement.remove();
-          displayCompanyData(data);
-        });
+      let response = await fetch(url);
+      let data = await response.json();
+      loadingElement.remove();
+      displayCompanyData(data);
     }
-
-    fetchCompanyData();
 
     function displayCompanyData(data) {
       let stockDetails = document.getElementById("stock-details");
       let dataStore = {
         name: data.profile.companyName,
-        price: `${data.profile.price}$`,
+        price: ` Stock Price: ${data.profile.price}$`,
         description: data.profile.description,
-        percentage: `+${Number(data.profile.changesPercentage).toFixed(3)} %`,
+        percentage: `(+${Number(data.profile.changesPercentage).toFixed(3)} %)`,
       };
 
       let img = document.createElement("img");
       img.src = data.profile.image;
+      img.className = "card-img";
       stockDetails.appendChild(img);
 
       let container = document.createElement("div");
@@ -174,7 +192,7 @@ const app = () => {
 
       let percentage = document.querySelector(".percentage");
       if (data.profile.changesPercentage < 0) {
-        let change = percentage.innerHTML.slice(1);
+        let change = `(${percentage.innerHTML.slice(2)}`;
         percentage.innerHTML = change;
         percentage.classList.add("red");
       } else {
@@ -189,18 +207,14 @@ const app = () => {
     }
 
     function createChart(data) {
-      console.log(data);
       let ctx = document.getElementById("myChart").getContext("2d");
       let pastValuesPrice = [];
       let pastValuesDate = [];
       let pointsSelected = Math.min(8342, data.historical.length);
       let gapsBetweenPoints = Math.ceil(pointsSelected / 10);
-      console.log(gapsBetweenPoints);
-      console.log(data);
       for (let i = 0; i < pointsSelected; i = i + gapsBetweenPoints) {
         const price = data.historical[i].close;
         const date = data.historical[i].date;
-        console.log(data);
         pastValuesPrice.push(price);
         pastValuesDate.push(date);
       }
@@ -229,7 +243,7 @@ const app = () => {
         },
       });
     }
-
+    fetchCompanyData();
     getDataForChart().then((data) => createChart(data));
   }
 };

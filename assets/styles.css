@@ -129,6 +129,7 @@ font-size: 24px;
 .price{
   padding-bottom: 10px;
   font-weight: 600;
+  font-size: 22px;
 }
 
 img{
@@ -166,10 +167,6 @@ display: flex;
 
 .changesPercentage{
   margin-left: 20px;
-
-}
-
-.changesPercentage:hover{
   text-decoration: none;
 }
 
@@ -187,10 +184,71 @@ display: flex;
 
 
 canvas{
- height: 230px;
+ height: 330px;
  width: 650px;
 }
 
+.card-img{
+ position: relative;
+ top: 0px;
+}
+
+.percentage{
+position: relative;
+bottom:  124px;
+left: 200px;
+}
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+  --offset: 20vw;
+  --move-initial: calc(-25% + var(--offset));
+  --move-final: calc(-50% + var(--offset));
+}
 
 
+.marquee-container{
+  border: 1px solid #dbdbdb;
+  padding-bottom:10px ;
+  padding-top:10px ;
+}
 
+ .marquee__inner {
+  width: fit-content;
+  display: flex;
+  position: relative;
+  transform: translate3d(var(--move-initial), 0, 0);
+  animation: marquee 35s linear infinite;
+  animation-play-state: running;
+}
+
+.marquee span {
+  font-size: 1vw;
+}
+
+@keyframes marquee {
+  0% {
+      transform: translate3d(var(--move-initial), 0, 0);
+  }
+
+ 100% {
+      transform: translate3d(var(--move-final), 0, 0);
+  }
+} 
+
+
+.marquee-name{
+min-width: fit-content;
+margin-left: 22.2px;
+margin-right: 5px;
+max-height: 10px;
+font-size: 1vw;
+}
+
+
+.marquee-price{
+  font-size: 1vw;
+}
+ 
+ 
