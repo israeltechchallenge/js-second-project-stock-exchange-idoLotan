@@ -10,25 +10,15 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <link
-      rel="shortcut icon"
-      type="image/png"
-      href="/js-second-project-stock-exchange-idoLotan/img/img.png"
-    />
+    <link rel="shortcut icon" type="image/png" href="img/img.png" />
   </head>
   <body id="searchStock">
     <header>
       <h1>Search Nasdaq Stocks</h1>
     </header>
-    <div class="marquee-container">
-      <div class="marquee">
-        <div
-          class="marquee__inner"
-          aria-hidden="true"
-          id="marquee__container"
-        ></div>
-      </div>
-    </div>
+
+    <div class="marquee-wrapper"></div>
+
     <div class="main" id="main-page">
       <div class="main-search-bar">
         <input id="input" placeholder="Search Stocks..." />
@@ -37,6 +27,7 @@
         <div class="results-list" id="display-results"></div>
       </div>
       <script src="index.js"></script>
+      <script src="marquee.js"></script>
     </div>
   </body>
 </html>

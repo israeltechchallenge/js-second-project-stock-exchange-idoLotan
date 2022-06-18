@@ -9,49 +9,21 @@ const app = () => {
   }
 
   function displaySearchPage() {
-    async function fetchMarqueeData() {
-      try {
-        let url = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/quotes/nyse?exchange=NASDAQ`;
-        let response = await fetch(url);
-        let data = await response.json();
-        let marqueeContainer = document.getElementById("marquee__container");
-        for (let j = 0; j < 4; j++) {
-          for (let i = 0; i < 10; i++) {
-            let marqueePrice = document.createElement("div");
-            marqueePrice.className = "marquee-price";
-            let marqueeSymbol = document.createElement("div");
-            marqueeSymbol.className = "marquee-name";
-            const symbol = data[i].symbol;
-            const price = `${data[i].price}$`;
-            marqueeSymbol.innerHTML = symbol;
-            marqueePrice.innerHTML = price;
-            marqueePrice.classList.add("green");
-            marqueeContainer.appendChild(marqueeSymbol);
-            marqueeContainer.appendChild(marqueePrice);
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    fetchMarqueeData();
-
     async function dataFetch() {
+      const loadingElement = showLoadingScreen();
       try {
-        const loadingElement = showLoadingScreen();
         let searchUrl = `https:stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query=${input.value}&amp;limit=10&amp;exchange=NASDAQ`;
         let searchResponse = await fetch(searchUrl);
         let data = await searchResponse.json();
         displaySearch(data);
-
         let addDataUrl = await fetchNTimes();
         let addDataResponse = await awaitJson(addDataUrl);
         getImg(addDataResponse);
         getChangesPercentage(addDataResponse);
+      } catch (eror) {
         loadingElement.remove();
-      } catch (err) {
-        console.log(err);
+        clearEror();
+        showError(eror);
       }
     }
 
@@ -148,23 +120,45 @@ const app = () => {
     displayStock.appendChild(loading);
     return loading;
   }
+  function showError(eror) {
+    let main = document.getElementById("main-page");
+    let erorContainer = document.createElement("div");
+    erorContainer.id = "eror-container";
+    console.log(eror);
+    let message = document.createElement("div");
+    message.className = "eror";
+    message.innerHTML = "something went wrong try again";
+    erorContainer.appendChild(message);
+    main.appendChild(erorContainer);
+  }
+
+  function clearEror() {
+    if (document.getElementById("eror-container")) {
+      const erorElement = document.getElementById("eror-container");
+      erorElement.removeChild(erorElement.firstElementChild);
+    }
+  }
 
   function displayCompanyPage() {
     function catSymbol() {
-      let urlParams = new URLSearchParams(window.location.search);
-      queryString = urlParams.toString();
-      let symbol = queryString.split(`=`)[1];
+      let params = new URLSearchParams(window.location.search);
+      let symbol = params.get("symbol");
       return symbol;
     }
 
     async function fetchCompanyData() {
       const loadingElement = showLoadingScreen();
-      let symbol = catSymbol();
-      let url = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbol}`;
-      let response = await fetch(url);
-      let data = await response.json();
-      loadingElement.remove();
-      displayCompanyData(data);
+      try {
+        let symbol = catSymbol();
+        let url = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/${symbol}`;
+        let response = await fetch(url);
+        let data = await response.json();
+        loadingElement.remove();
+        return data;
+      } catch (eror) {
+        showError(eror);
+        loadingElement.remove();
+      }
     }
 
     function displayCompanyData(data) {
@@ -200,10 +194,12 @@ const app = () => {
       }
     }
 
-    function getDataForChart() {
+    async function getDataForChart() {
       let symbol = catSymbol();
       let url = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/${symbol}?serietype=line`;
-      return fetch(url).then((response) => response.json());
+      let response = await fetch(url);
+      let data = await response.json();
+      return data;
     }
 
     function createChart(data) {
@@ -243,8 +239,13 @@ const app = () => {
         },
       });
     }
-    fetchCompanyData();
-    getDataForChart().then((data) => createChart(data));
+    const init = async () => {
+      let companyData = await fetchCompanyData();
+      displayCompanyData(companyData);
+      let chartData = await getDataForChart();
+      createChart(chartData);
+    };
+    init();
   }
 };
 
