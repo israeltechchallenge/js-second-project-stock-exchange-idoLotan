@@ -1,11 +1,3 @@
-// function showError(eror) {
-//   console.log(eror);
-//   let message = document.createElement("div");
-//   message.className = "eror";
-//   message.innerHTML = "something went wrong try again";
-//   let main = document.querySelector("body");
-//   main.appendChild(message);
-// }
 function showLoadingScreen() {
   let loading = document.createElement("div");
   loading.innerHTML = `Loading...`;
@@ -31,14 +23,20 @@ function showError(eror) {
   main.appendChild(message);
 }
 
-// function showError(eror) {
-//   let main = document.getElementById("main-page");
-//   let erorContainer = document.createElement("div");
-//   erorContainer.id = "eror-container";
-//   console.log(eror);
-//   let message = document.createElement("div");
-//   message.className = "eror";
-//   message.innerHTML = "something went wrong try again";
-//   erorContainer.appendChild(message);
-//   main.appendChild(erorContainer);
-// }
+function search() {
+  let searched = document.getElementById("input").value.trim();
+  console.log(searched.length);
+  if (searched.length > 1) {
+    let aTag = document.getElementById("container").querySelectorAll(".aTag");
+    aTag.forEach((element) => {
+      let text = element.innerHTML;
+      element.innerHTML = `<mark>6</mark>`;
+      // console.log(text);
+      // let re = new RegExp(searched, "g"); // search for all instances
+      // console.log(re);
+
+      // let newText = text.replace(re, `<mark>${searched}</mark>`);
+      // document.getElementById("input").innerHTML = newText;
+    });
+  }
+}

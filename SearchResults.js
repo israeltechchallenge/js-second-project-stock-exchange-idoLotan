@@ -78,7 +78,6 @@ class SearchResults {
     if (results.firstElementChild) {
       results.removeChild(results.firstElementChild);
     }
-    console.log(this.data);
     let listLength = Math.min(10, this.data.length);
     let container = document.createElement("div");
     container.style.height = `${74 * listLength}px`;
@@ -97,6 +96,29 @@ class SearchResults {
     results.appendChild(container);
   }
 
+  highlight() {
+    let inputText = document.getElementById("input").value.trim();
+    let text;
+    let aTag = document.getElementById("container").querySelectorAll(".aTag");
+    aTag.forEach((element) => {
+      text = element.innerHTML;
+      for (let i = 0; i < text.length; i++) {
+        if (
+          text.substring(i, i + inputText.length).toUpperCase() ==
+          inputText.toUpperCase()
+        ) {
+          element.innerHTML = text
+            .split(text.substring(i, i + inputText.length))
+            .join(
+              '<span class="highlight">' +
+                text.substring(i, i + inputText.length) +
+                "</span>"
+            );
+        }
+      }
+    });
+  }
+
   async renderResults() {
     this.data = await this.dataFetch();
     this.displaySearch();
@@ -104,20 +126,19 @@ class SearchResults {
     let addDataResponse = await this.awaitJson(addDataUrl);
     this.getImg(addDataResponse);
     this.getChangesPercentage(addDataResponse);
+    this.highlight();
   }
 
   render() {
     let timer;
-    const debouce = (e) => {
-      const value = e.target.value;
+    const debounce = () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
-        console.log(value);
         this.renderResults();
       }, 1000);
     };
     let input = document.getElementById("input");
-    input.addEventListener("keyup", debouce);
+    input.addEventListener("keyup", debounce);
     let button = document.getElementById("custom-button");
     button.addEventListener("click", (e) => {
       this.renderResults(e);
