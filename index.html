@@ -17,17 +17,33 @@
       <h1>Search Nasdaq Stocks</h1>
     </header>
 
-    <div class="marquee-wrapper"></div>
+    <div class="marquee-wrapper" id="marquee-wrapper"></div>
+    <div id="form"></div>
+    <div id="results"></div>
 
-    <div class="main" id="main-page">
+    <!-- <div class="main" id="main-page">
       <div class="main-search-bar">
         <input id="input" placeholder="Search Stocks..." />
         <button id="custom-button" class="fa fa-search"></button>
         <div class="load" id="loadDiv"></div>
         <div class="results-list" id="display-results"></div>
-      </div>
-      <script src="index.js"></script>
-      <script src="marquee.js"></script>
-    </div>
+      </div> -->
+    <script src="commonFunctions.js"></script>
+    <!-- <script src="index.js"></script> -->
+    <script src="Marquee.js"></script>
+    <script src="SearchForm.js"></script>
+    <script src="searchResults.js"></script>
+    <script>
+      (async function () {
+        const marqueeObject = new Marquee(
+          document.getElementById("marquee-wrapper")
+        );
+        marqueeObject.load();
+        const form = new SearchForm(document.getElementById("form"));
+        const results = new SearchResults(document.getElementById("results"));
+        form.onSearch();
+        results.render();
+      })();
+    </script>
   </body>
 </html>

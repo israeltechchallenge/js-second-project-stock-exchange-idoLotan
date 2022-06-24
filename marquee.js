@@ -1,21 +1,14 @@
-function showError(eror) {
-  console.log(eror);
-  let message = document.createElement("div");
-  message.className = "eror";
-  message.innerHTML = "something went wrong try again";
-  let main = document.getElementById("main-page");
-  main.appendChild(message);
-}
-
 class Marquee {
   constructor(element) {
     this.element = element;
+    this.data;
+    this.container;
+    this.url = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/quotes/nyse?exchange=NASDAQ`;
   }
+
   async getData() {
     try {
-      const response = await fetch(
-        `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/quotes/nyse?exchange=NASDAQ`
-      );
+      const response = await fetch(this.url);
       const data = await response.json();
       return data;
     } catch (eror) {
@@ -24,7 +17,6 @@ class Marquee {
   }
 
   async setMarqueeData() {
-    const data = await this.getData();
     let container = document.createElement("div");
     container.className = "marquee";
     container.id = "marquee__container";
@@ -34,8 +26,8 @@ class Marquee {
         marqueePrice.className = "marquee-price";
         let marqueeSymbol = document.createElement("div");
         marqueeSymbol.className = "marquee-name";
-        const symbol = data[i].symbol;
-        const price = `${data[i].price}$`;
+        const symbol = this.data[i].symbol;
+        const price = `${this.data[i].price}$`;
         marqueeSymbol.innerHTML = symbol;
         marqueePrice.innerHTML = price;
         marqueePrice.classList.add("green");
@@ -43,15 +35,15 @@ class Marquee {
         container.appendChild(marqueePrice);
       }
     }
-    return container;
+    this.container = container;
   }
   async displayMarqueeData() {
-    let container = await this.setMarqueeData();
     let marqueeContainer = this.element;
-    marqueeContainer.appendChild(container);
+    marqueeContainer.appendChild(this.container);
+  }
+  async load() {
+    this.data = await this.getData();
+    this.setMarqueeData();
+    this.displayMarqueeData();
   }
 }
-
-let marqueeElement = document.querySelector(".marquee-wrapper");
-let marqueeObject = new Marquee(marqueeElement);
-marqueeObject.displayMarqueeData();
