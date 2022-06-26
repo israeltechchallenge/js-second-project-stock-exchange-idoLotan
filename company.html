@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.html" />
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="/js-second-project-stock-exchange-idoLotan/img/img.png"
+    />
+  </head>
+  <body id="stockInfo">
+    <header>
+      <h1>Search Nasdaq Stocks</h1>
+    </header>
+    <div class="main" id="main-page">
+      <div class="display-stock" id="display-stock">
+        <div class="load" id="loadDiv"></div>
+        <div class="stock-details" id="stock-details"></div>
+        <div class="stock-graph" id="stock-graph">
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <script src="commonFunctions.js"></script>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

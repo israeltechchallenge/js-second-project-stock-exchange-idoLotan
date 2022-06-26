@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock Exchange</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="shortcut icon" type="image/png" href="img/img.png" />
+  </head>
+  <body id="searchStock">
+    <header>
+      <h1>Search Nasdaq Stocks</h1>
+    </header>
+
+    <div class="marquee-wrapper" id="marquee-wrapper"></div>
+    <div id="form"></div>
+    <div id="results"></div>
+    <script src="commonFunctions.js"></script>
+    <script src="Marquee.js"></script>
+    <script src="SearchForm.js"></script>
+    <script src="searchResults.js"></script>
+    <script>
+      (async function () {
+        const marqueeObject = new Marquee(
+          document.getElementById("marquee-wrapper")
+        );
+        marqueeObject.load();
+        const form = new SearchForm(document.getElementById("form"));
+        const results = new SearchResults(document.getElementById("results"));
+        form.onSearch();
+        results.render();
+      })();
+    </script>
+  </body>
+</html>
